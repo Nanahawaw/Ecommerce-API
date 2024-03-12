@@ -56,4 +56,28 @@ const signIn = async (req, res) => {
   }
 };
 
-module.exports = { signUp, signIn };
+//update a user
+const updateUser = async (req, res, next) => {
+  if (req.user.id !== req.params.id)
+    return res.status(401).json("You can only update your own account");
+  try {
+    if (req.body.password) {
+      req.body.password = await bcrypt.hash(req.body.password, 10);
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          email: req.body.email,
+          password: req.body.password,
+          mobile: req.body.mobile,
+        },
+      },
+      { new: true }
+    );
+  } catch (error) {
+    res.status(500).json("Internal server error");
+  }
+};
+
+module.exports = { signUp, signIn, updateUser };
