@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+//auth routes
+
 const signUp = async (req, res) => {
   const { name, email, mobile, password } = req.body;
   try {
@@ -58,7 +60,7 @@ const signIn = async (req, res) => {
 
 //sign in with google
 
-const google = async (req, res, next) => {
+const google = async (req, res) => {
   try {
     const user = await user.findOne({ email: req.body.email });
     if (user) {
@@ -100,6 +102,21 @@ const google = async (req, res, next) => {
   }
 };
 
+//sign out
+
+const signOut = (req, res) => {
+  try {
+    res.clearCookie("accessToken");
+    res.status(200).json("You have logged out");
+  } catch (error) {
+    res.status(500).json("Internal server error");
+  }
+};
+
+//end of auth routes
+
+//user routes
+
 //update a user
 const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id)
@@ -128,4 +145,4 @@ const updateUser = async (req, res, next) => {
 
 //delete a user
 
-module.exports = { signUp, signIn, updateUser, google };
+module.exports = { signUp, signIn, updateUser, google, signOut };
