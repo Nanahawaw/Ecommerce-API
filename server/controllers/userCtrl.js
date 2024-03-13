@@ -11,21 +11,23 @@ const signUp = async (req, res) => {
     const hashedpassword = await bcrypt.hash(password, 10);
     const findUser = await User.findOne({ email });
     if (findUser) {
-      res.status(400).json({ error: UserErrors.USER_ALREADY_EXISTS });
-    } else {
-      const newUser = await User.create({
-        name,
-        email,
-        mobile,
-        password: hashedpassword,
-      });
-      res.status(201).json({
-        newUser,
-        message: "user created successfully",
-      });
+      return res.status(400).json({ error: UserErrors.USER_ALREADY_EXISTS });
     }
+    const newUser = await User.create({
+      name,
+      email,
+      mobile,
+      password: hashedpassword,
+    });
+    // Don't send the entire newUser object in the response
+    res.status(201).json({
+      message: "User created successfully",
+      // Optionally, you can send the created user's ID or email
+      userId: newUser._id,
+    });
   } catch (error) {
-    res.status(500).json("Internal server error");
+    // Send detailed error message in response
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -145,4 +147,15 @@ const updateUser = async (req, res, next) => {
 
 //delete a user
 
-module.exports = { signUp, signIn, updateUser, google, signOut };
+const deleteUser = async (req, res) => {
+  if (req.user.id !== req.params.id)
+    return res.status(401).json("You can only delete your own account");
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json("user deleted sucessfully");
+  } catch (error) {
+    res.status(500).json("Internal server error");
+  }
+};
+
+module.exports = { signUp, signIn, updateUser, google, signOut, deleteUser };
