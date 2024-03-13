@@ -82,4 +82,6 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+//delete a user
+
 module.exports = { signUp, signIn, updateUser };
