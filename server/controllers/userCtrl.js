@@ -56,7 +56,7 @@ const signIn = async (req, res) => {
       .status(200)
       .json({ rest, message: "You are Logged in" });
   } catch (error) {
-    res.status(500).json("Internal server error");
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -100,7 +100,7 @@ const google = async (req, res) => {
         .json({ rest, message: "You are Logged in" });
     }
   } catch (error) {
-    res.status(500).json("Internal server error");
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -111,7 +111,7 @@ const signOut = (req, res) => {
     res.clearCookie("accessToken");
     res.status(200).json("You have logged out");
   } catch (error) {
-    res.status(500).json("Internal server error");
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -141,7 +141,7 @@ const updateUser = async (req, res, next) => {
     const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
   } catch (error) {
-    res.status(500).json("Internal server error");
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -154,7 +154,7 @@ const deleteUser = async (req, res) => {
     await User.findByIdAndDelete(req.params.id);
     res.status(200).json("user deleted sucessfully");
   } catch (error) {
-    res.status(500).json("Internal server error");
+    res.status(500).json({ error: error.message });
   }
 };
 
