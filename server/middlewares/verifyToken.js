@@ -11,4 +11,16 @@ const verifyToken = async (req, res, next) => {
   });
 };
 
-module.exports = verifyToken;
+const authorizedAdmin = async (req, res, next) => {
+  try {
+    if (req.user && req.user.isAdmin) {
+      next();
+    } else {
+      res.status(401).json({ error: UserErrors.UNAUTHORIZED });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { verifyToken, authorizedAdmin };
