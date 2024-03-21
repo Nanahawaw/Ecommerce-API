@@ -16,6 +16,6 @@ mongoose
   .connect(process.env.MONGO)
   .then(console.log("Database connected successfully"));
 
-app.use("/user", userRouter);
+app.use("users", userRouter);
 
 app.listen(3001, () => console.log("server running on port 3001"));
