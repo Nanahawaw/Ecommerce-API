@@ -216,13 +216,13 @@ const getuserById = async (req, res) => {
 //update a user
 
 const updateUserById = async (req, res) => {
-  const user = User.findById(req.params.id);
+  const user = await User.findById(req.params.id);
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
     user.mobile = req.body.mobile || user.mobile;
     user.isAdmin = Boolean(req.body.isAdmin);
-    const updatedUser = await User.save();
+    const updatedUser = await user.save();
 
     res.json({
       _id: updatedUser._id,
