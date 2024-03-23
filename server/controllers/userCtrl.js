@@ -121,7 +121,7 @@ const signOut = (req, res) => {
 //user controllers
 
 //update userprofile
-const updateUser = async (req, res, next) => {
+const updateUser = async (req, res) => {
   if (req.user.id !== req.params.id)
     return res.status(401).json("You can only update your own account");
   try {
