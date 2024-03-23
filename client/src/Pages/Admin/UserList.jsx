@@ -77,6 +77,7 @@ const UserList = () => {
               <tr>
                 <th className='px-4 py-2 text-left'>ID</th>
                 <th className='px-4 py-2 text-left'>NAME</th>
+                <th className='px-4 py-2 text-left'>MOBILE</th>
                 <th className='px-4 py-2 text-left'>EMAIL</th>
                 <th className='px-4 py-2 text-left'>ADMIN</th>
                 <th className='px-4 py-2'></th>
@@ -107,7 +108,49 @@ const UserList = () => {
                         {user.name}{' '}
                         <button
                           onClick={() =>
-                            toggleEdit(user._id, user.name, user.email)
+                            toggleEdit(
+                              user._id,
+                              user.name,
+                              user.email,
+                              user.mobile
+                            )
+                          }
+                        >
+                          <FaEdit className='ml-[1rem]' />
+                        </button>
+                      </div>
+                    )}
+                  </td>
+
+                  <td className='px-4 py-2'>
+                    {editableUserId === user._id ? (
+                      <div className='flex items-center'>
+                        <input
+                          type='text'
+                          value={editableUserMobile}
+                          onChange={(e) =>
+                            setEditableUserMobile(e.target.value)
+                          }
+                          className='w-full p-2 border rounded-lg'
+                        />
+                        <button
+                          onClick={() => updateHandler(user._id)}
+                          className='ml-2 bg-blue-500 text-white py-2 px-4 rounded-lg'
+                        >
+                          <FaCheck />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className='flex items-center'>
+                        {user.mobile}{' '}
+                        <button
+                          onClick={() =>
+                            toggleEdit(
+                              user._id,
+                              user.name,
+                              user.mobile,
+                              user.email
+                            )
                           }
                         >
                           <FaEdit className='ml-[1rem]' />
@@ -136,7 +179,12 @@ const UserList = () => {
                         <a href={`mailto:${user.email}`}>{user.email}</a>{' '}
                         <button
                           onClick={() =>
-                            toggleEdit(user._id, user.name, user.email)
+                            toggleEdit(
+                              user._id,
+                              user.name,
+                              user.email,
+                              user.mobile
+                            )
                           }
                         >
                           <FaEdit className='ml-[1rem]' />
