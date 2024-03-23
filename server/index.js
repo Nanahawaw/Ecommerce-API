@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/userRoute");
+const categoryRouter = require("./routes/categoryRoute")
 
 const app = express();
 
@@ -17,5 +18,6 @@ mongoose
   .then(console.log("Database connected successfully"));
 
 app.use("/api/users", userRouter);
+app.use("/api/category", categoryRouter);
 
 app.listen(3001, () => console.log("server running on port 3001"));
