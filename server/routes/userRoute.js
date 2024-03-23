@@ -26,7 +26,7 @@ router.post("/google", google);
 router.get("/signout", signOut);
 
 //user routes
-router.put("/profile", verifyToken, updateUser);
+router.post("/update/:id", verifyToken, updateUser);
 router.delete("/delete/:id", verifyToken, deleteUser);
 router.get("/profile", verifyToken, getUserProfile);
 
