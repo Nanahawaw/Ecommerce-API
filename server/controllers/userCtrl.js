@@ -122,29 +122,34 @@ const signOut = (req, res) => {
 
 //update userprofile
 const updateUser = async (req, res) => {
-  if (req.user.id !== req.params.id)
-    return res.status(401).json("You can only update your own account");
-  try {
+  const user = await User.findById(req.user.id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.mobile = req.body.mobile|| user.mobile;
+
     if (req.body.password) {
-      req.body.password = await bcrypt.hash(req.body.password, 10);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      user.password = hashedPassword;
     }
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          email: req.body.email,
-          password: req.body.password,
-          mobile: req.body.mobile,
-        },
-      },
-      { new: true }
-    );
-    const { password, ...rest } = updatedUser._doc;
-    res.status(200).json(rest);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser.id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      mobile: updatedUser.mobile,
+      isAdmin: updatedUser.isAdmin,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
   }
 };
+
 
 //delete user
 

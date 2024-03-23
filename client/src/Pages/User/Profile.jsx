@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -19,10 +20,11 @@ const Profile = () => {
   const [updateProfile, { isLoading: loadingUpdateProfile }] =
     useProfileMutation();
 
+
   useEffect(() => {
     setName(userInfo.name);
     setEmail(userInfo.email);
-    setMobile(userInfo.mobile);
+    setMobile(userInfo.mobile)
   }, [userInfo.email, userInfo.name, userInfo.mobile]);
 
   const dispatch = useDispatch();
@@ -36,7 +38,6 @@ const Profile = () => {
         const res = await updateProfile({
           _id: userInfo._id,
           name,
-          mobile,
           email,
           password,
         }).unwrap();
@@ -75,6 +76,7 @@ const Profile = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
+
             <div className="mb-4">
               <label className="block text-white mb-2">Mobile Number</label>
               <input
