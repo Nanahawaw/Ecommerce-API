@@ -1,7 +1,7 @@
-const UserErrors = require("../middlewares/ErrorHandlers");
-const User = require("../models/userModel");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const UserErrors = require('../middlewares/ErrorHandlers');
+const User = require('../models/userModel');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 //auth controllers
 
@@ -21,7 +21,7 @@ const signUp = async (req, res) => {
     });
     // Don't send the entire newUser object in the response
     res.status(201).json({
-      message: "User created successfully",
+      message: 'User created successfully',
 
       userId: newUser._id,
     });
@@ -46,18 +46,18 @@ const signIn = async (req, res) => {
       return res.status(400).json({ error: UserErrors.WRONG_CREDENTIALS });
     }
     const token = jwt.sign(
-      { id: user._id, isAdmin: user.isAdmin },
+      { id: user._id, isAdmin: user.isAdmin, name: user.name },
       process.env.JWT_SECRET
     );
     //destructuring the password
     const { password: pass, ...rest } = user._doc;
     res
-      .cookie("accessToken", token, {
+      .cookie('accessToken', token, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
       })
       .status(200)
-      .json({ rest, message: "You are Logged in" });
+      .json({ rest, message: 'You are Logged in' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -73,12 +73,12 @@ const google = async (req, res) => {
       //destructuring the password
       const { password: pass, ...rest } = user._doc;
       res
-        .cookie("accessToken", token, {
+        .cookie('accessToken', token, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
         })
         .status(200)
-        .json({ rest, message: "You are Logged in" });
+        .json({ rest, message: 'You are Logged in' });
     } else {
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
@@ -86,7 +86,7 @@ const google = async (req, res) => {
       const hashedpassword = await bcrypt.hash(generatedPassword, 10);
       const newUser = new User({
         name:
-          req.body.name.split(" ").join("").toLowerCase() +
+          req.body.name.split(' ').join('').toLowerCase() +
           Math.random().toString(36).slice(-4),
         email: req.body.email,
         password: hashedpassword,
@@ -95,12 +95,12 @@ const google = async (req, res) => {
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: pass, ...rest } = newUser._doc;
       res
-        .cookie("accessToken", token, {
+        .cookie('accessToken', token, {
           httpOnly: true,
           maxAge: 24 * 60 * 60 * 1000,
         })
         .status(200)
-        .json({ rest, message: "You are Logged in" });
+        .json({ rest, message: 'You are Logged in' });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -111,8 +111,8 @@ const google = async (req, res) => {
 
 const signOut = (req, res) => {
   try {
-    res.clearCookie("accessToken");
-    res.status(200).json("You have logged out");
+    res.clearCookie('accessToken');
+    res.status(200).json('You have logged out');
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -127,7 +127,7 @@ const updateUser = async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    user.mobile = req.body.mobile|| user.mobile;
+    user.mobile = req.body.mobile || user.mobile;
 
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
@@ -146,19 +146,18 @@ const updateUser = async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 };
-
 
 //delete user
 
 const deleteUser = async (req, res) => {
   if (req.user.id !== req.params.id)
-    return res.status(401).json("You can only delete your own account");
+    return res.status(401).json('You can only delete your own account');
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.status(200).json("user deleted sucessfully");
+    res.status(200).json('user deleted sucessfully');
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -194,15 +193,15 @@ const deleteUserById = async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
       if (user.isAdmin) {
-        return res.status(400).json({ error: "Cannot delete admin user" });
+        return res.status(400).json({ error: 'Cannot delete admin user' });
       }
       await User.deleteOne({ _id: user._id });
-      return res.json({ message: "User removed successfully" });
+      return res.json({ message: 'User removed successfully' });
     } else {
       return res.status(404).json({ error: UserErrors.NO_USER_FOUND });
     }
   } catch (error) {
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 
