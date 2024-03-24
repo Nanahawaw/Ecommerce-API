@@ -146,8 +146,6 @@ const getAllProducts = async (req, res) => {
 };
 
 const addProductReview = async (req, res) => {
-  console.log(req.user);
-
   try {
     const { rating, comment } = req.body;
 
