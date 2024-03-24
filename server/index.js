@@ -20,6 +20,6 @@ mongoose
 
 app.use('/api/users', userRouter);
 app.use('/api/category', categoryRouter);
-app.use('/products', productRouter);
+app.use('/api/products', productRouter);
 
 app.listen(3001, () => console.log('server running on port 3001'));
