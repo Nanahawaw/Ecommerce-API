@@ -10,13 +10,21 @@ const {
   getOneProduct,
   getAllProducts,
   addProductReview,
+  fetchTopProducts,
+  fetchNewProducts,
 } = require('../controllers/productCtrl');
 
 const router = express.Router();
 
 router.post('/', verifyToken, authorizedAdmin, formidable(), addProduct);
-router.post('/:id/reviews', verifyToken, checkId, addProductReview);
+router.get('/', verifyToken, authorizedAdmin, fetchProducts);
+
 router.get('/allproducts', getAllProducts);
+router.post('/:id/reviews', verifyToken, checkId, addProductReview);
+
+router.get('/top', fetchTopProducts);
+router.get('/new', fetchNewProducts);
+
 router.put(
   '/:id',
   verifyToken,
@@ -26,7 +34,5 @@ router.put(
 );
 router.delete('/:id', verifyToken, authorizedAdmin, removeProduct);
 router.get('/:id', verifyToken, getOneProduct);
-router.get('/', verifyToken, authorizedAdmin, fetchProducts);
-router.post('/reviews');
 
 module.exports = router;
