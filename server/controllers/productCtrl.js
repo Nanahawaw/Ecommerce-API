@@ -35,44 +35,35 @@ const addProduct = async (req, res) => {
 
 const updateProductDetails = async (req, res) => {
   try {
-    const fieldsToUpdate = Object.keys(req.fields);
-    const errors = [];
+    const { name, description, price, category, quantity, brand } = req.fields;
 
-    // Validate only the fields that are being updated
-    if (fieldsToUpdate.includes('name') && !req.fields.name) {
-      errors.push('Name is required');
-    }
-    if (fieldsToUpdate.includes('description') && !req.fields.description) {
-      errors.push('Description is required');
-    }
-    if (fieldsToUpdate.includes('price') && !req.fields.price) {
-      errors.push('Price is required');
-    }
-    if (fieldsToUpdate.includes('category') && !req.fields.category) {
-      errors.push('Category is required');
-    }
-    if (fieldsToUpdate.includes('quantity') && !req.fields.quantity) {
-      errors.push('Quantity is required');
-    }
-    if (fieldsToUpdate.includes('brand') && !req.fields.brand) {
-      errors.push('Brand is required');
+    // Validation
+    switch (true) {
+      case !name:
+        return res.json({ error: 'Name is required' });
+      case !brand:
+        return res.json({ error: 'Brand is required' });
+      case !description:
+        return res.json({ error: 'Description is required' });
+      case !price:
+        return res.json({ error: 'Price is required' });
+      case !category:
+        return res.json({ error: 'Category is required' });
+      case !quantity:
+        return res.json({ error: 'Quantity is required' });
     }
 
-    // If there are errors, return them
-    if (errors.length > 0) {
-      return res.status(400).json({ errors });
-    }
-
-    // Update the product
     const product = await Product.findByIdAndUpdate(
       req.params.id,
-      { $set: { ...req.fields, someOtherField: 'default value' } },
+      { ...req.fields },
       { new: true }
     );
 
+    await product.save();
+
     res.json(product);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(400).json(error.message);
   }
 };
@@ -93,27 +84,21 @@ const removeProduct = async (req, res) => {
 const fetchProducts = async (req, res) => {
   try {
     const pageSize = 6;
-    const page = Number(req.query.pageNumber) || 1;
     const keyword = req.query.keyword
-      ? {
-          name: { $regex: req.query.keyword, $options: 'i' },
-        }
+      ? { name: { $regex: req.query.keyword, $options: 'i' } }
       : {};
 
-    const count = await Product.countDocuments({ ...keyword });
-    const products = await Product.find({ ...keyword })
-      .limit(pageSize)
-      .skip(pageSize * (page - 1));
-
+    const count = await Product.countDocuments({ keyword });
+    const products = await Product.find({ ...keyword }).limit(pageSize);
     res.json({
       products,
-      page,
+      page: 1,
       pages: Math.ceil(count / pageSize),
-      hasmore: page < Math.ceil(count / pageSize),
+      hasmore: false,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    console.log(error);
+    res.status(500).json(error.message);
   }
 };
 

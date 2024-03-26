@@ -89,23 +89,14 @@ const AdminProductUpdate = () => {
       const data = await updateProduct({ productId: params._id, formData });
 
       if (data?.error) {
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 2000,
-        });
+        toast.error(data.error);
       } else {
-        toast.success(`Product successfully updated`, {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 2000,
-        });
+        toast.success(`Product successfully updated`);
         navigate('/admin/allproductslist');
       }
-    } catch (err) {
-      console.log(err);
-      toast.error('Product update failed. Try again.', {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
+    } catch (error) {
+      console.log(error);
+      toast.error('Product update failed. Try again.');
     }
   };
 
@@ -117,17 +108,11 @@ const AdminProductUpdate = () => {
       if (!answer) return;
 
       const { data } = await deleteProduct(params._id);
-      toast.success(`"${data.name}" is deleted`, {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
+      toast.success(`"${data.name}" is deleted`);
       navigate('/admin/allproductslist');
     } catch (err) {
       console.log(err);
-      toast.error('Delete failed. Try again.', {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
+      toast.error('Delete failed. Try again.');
     }
   };
 
