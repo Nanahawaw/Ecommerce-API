@@ -188,6 +188,23 @@ const fetchNewProducts = async (req, res) => {
   }
 };
 
+const filteredProducts = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+
+    let args = {};
+
+    if (checked.length > 0) args.category = checked;
+
+    if (radio.length > 0) args.price = { $gte: radio[0], $lte: radio[1] };
+
+    const products = await Product.find(args);
+    res.json(products);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error.message);
+  }
+};
 module.exports = {
   addProduct,
   updateProductDetails,
@@ -198,4 +215,5 @@ module.exports = {
   addProductReview,
   fetchTopProducts,
   fetchNewProducts,
+  filteredProducts,
 };

@@ -12,6 +12,7 @@ const {
   addProductReview,
   fetchTopProducts,
   fetchNewProducts,
+  filteredProducts,
 } = require('../controllers/productCtrl');
 
 const router = express.Router();
@@ -34,5 +35,7 @@ router.put(
 );
 router.delete('/:id', verifyToken, authorizedAdmin, removeProduct);
 router.get('/:id', verifyToken, getOneProduct);
+
+router.post('/filtered-products', verifyToken, filteredProducts);
 
 module.exports = router;
