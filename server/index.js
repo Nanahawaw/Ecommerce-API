@@ -26,5 +26,4 @@ app.use('/api/products', productRouter);
 app.use('/api/upload', uploadRouter);
 
 app.use('/uploads', express.static(path.join(__dirname + '/uploads')));
-
 app.listen(3001, () => console.log('server running on port 3001'));
