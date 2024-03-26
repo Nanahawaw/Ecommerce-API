@@ -23,11 +23,14 @@ import ProductList from './Pages/Admin/ProductList';
 import AllProducts from './Pages/Admin/AllProducts';
 import ProductUpdate from './Pages/Admin/ProductUpdate';
 
+import Home from './Pages/Home.jsx';
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
+      <Route index={true} path='/' element={<Home />} />
 
       {/* Registered users */}
       <Route path='' element={<PrivateRoute />}>
