@@ -17,9 +17,9 @@ const {
 const router = express.Router();
 
 router.post('/', verifyToken, authorizedAdmin, formidable(), addProduct);
-router.get('/', verifyToken, authorizedAdmin, fetchProducts);
+router.get('/', verifyToken, fetchProducts);
 
-router.get('/allproducts', getAllProducts);
+router.get('/allproducts', authorizedAdmin, getAllProducts);
 router.post('/:id/reviews', verifyToken, checkId, addProductReview);
 
 router.get('/top', fetchTopProducts);

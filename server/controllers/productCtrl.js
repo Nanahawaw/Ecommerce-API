@@ -137,10 +137,10 @@ const addProductReview = async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
       const alreadyReviewed = product.reviews.find(
-        (r) => r.user.toString() === req.user._id.toString()
+        (r) => r.user.toString() === req.user.id.toString()
       );
       if (alreadyReviewed) {
-        res.status(400).json('You already reviewed this product');
+        return res.status(400).json('You already reviewed this product'); // Return here to exit the function
       }
       const review = {
         name: req.user.name,
@@ -157,14 +157,14 @@ const addProductReview = async (req, res) => {
         product.reviews.length;
 
       await product.save();
-      res.status(201).json({ message: 'Review added successfully' });
+      return res.status(201).json({ message: 'Review added successfully' }); // Return here to exit the function
     } else {
       res.status(404);
       throw new Error('Product not found');
     }
   } catch (error) {
     console.log(error);
-    res.status(400).json(error.message);
+    return res.status(400).json(error.message); // Return here to exit the function
   }
 };
 
