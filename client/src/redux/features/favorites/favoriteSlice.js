@@ -5,16 +5,10 @@ const favoriteSlice = createSlice({
   initialState: [],
   reducers: {
     addToFavorites: (state, action) => {
-      // Check if the product is not already in favorites
-      const existingProduct = state.find(
-        (product) => product._id === action.payload._id
-      );
-      if (!existingProduct) {
-        // Create a new array with the new product added
-        return [...state, action.payload];
+      // Checkif the product is not already favorites
+      if (!state.some((product) => product._id === action.payload._id)) {
+        state.push(action.payload);
       }
-      // If the product is already in favorites, return the existing state
-      return state;
     },
     removeFromFavorites: (state, action) => {
       // Remove the product with the matching ID
@@ -22,7 +16,7 @@ const favoriteSlice = createSlice({
     },
     setFavorites: (state, action) => {
       // Set the favorites from localStorage
-      return action.payload || [];
+      return action.payload;
     },
   },
 });
