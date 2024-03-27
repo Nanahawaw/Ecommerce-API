@@ -8,6 +8,7 @@ const userRouter = require('./routes/userRoute');
 const categoryRouter = require('./routes/categoryRoute');
 const productRouter = require('./routes/productRoute');
 const uploadRouter = require('./routes/uploadRoute');
+const orderRouter = require('./routes/orderRoute');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/api/users', userRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/products', productRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/api/orders', orderRouter);
 
 app.use('/uploads', express.static(path.join(__dirname + '/uploads')));
 app.listen(3001, () => console.log('server running on port 3001'));
