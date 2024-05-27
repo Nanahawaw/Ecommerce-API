@@ -12,15 +12,11 @@ const orderRouter = require('./routes/orderRoute');
 const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
 
-// Get the current directory
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const currentDir = process.cwd();
 
 // Read the Swagger document
 const swaggerDocument = JSON.parse(
-  fs.readFileSync(
-    path.join(__dirname, '../server/swagger-output.json'),
-    'utf-8'
-  )
+  fs.readFileSync(path.join(currentDir, 'swagger-output.json'), 'utf-8')
 );
 
 const app = express();

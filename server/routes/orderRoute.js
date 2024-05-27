@@ -13,13 +13,18 @@ const {
 } = require('../controllers/orderCtrl');
 const router = express.Router();
 
-router.post('/', verifyToken, createOrder);
-router.get('/', verifyToken, authorizedAdmin, getAllOrders);
-router.get('/mine', verifyToken, getUserOrders);
+router.post('/createOrder', verifyToken, createOrder);
+router.get('/allOrders', verifyToken, authorizedAdmin, getAllOrders);
+router.get('/orders/mine', verifyToken, getUserOrders);
 router.get('/total-orders', countTotalOrders);
 router.get('/total-sales', calculateTotalSales);
 router.get('/total-sales-by-date', calculateTotalSalesByDate);
-router.get('/:id', verifyToken, findOrderById);
-router.put('/:id/pay', verifyToken, markOrderAsPaid);
-router.put('/:id/deliver', verifyToken, authorizedAdmin, markOrderAsDelivered);
+router.get('order/:id', verifyToken, findOrderById);
+router.put('order/:id/pay', verifyToken, markOrderAsPaid);
+router.put(
+  'order/:id/deliver',
+  verifyToken,
+  authorizedAdmin,
+  markOrderAsDelivered
+);
 module.exports = router;

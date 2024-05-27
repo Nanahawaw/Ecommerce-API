@@ -17,25 +17,36 @@ const {
 
 const router = express.Router();
 
-router.post('/', verifyToken, authorizedAdmin, formidable(), addProduct);
-router.get('/', verifyToken, fetchProducts);
+router.post(
+  '/addProduct/',
+  verifyToken,
+  authorizedAdmin,
+  formidable(),
+  addProduct
+);
+router.get('/getProduct/', verifyToken, fetchProducts);
 
 router.get('/allproducts', authorizedAdmin, getAllProducts);
-router.post('/:id/reviews', verifyToken, checkId, addProductReview);
+router.post('/product/:id/reviews', verifyToken, checkId, addProductReview);
 
-router.get('/top', fetchTopProducts);
-router.get('/new', fetchNewProducts);
+router.get('/topProducts', fetchTopProducts);
+router.get('/newProducts', fetchNewProducts);
 
 router.put(
-  '/:id',
+  '/updateProduct/:id',
   verifyToken,
   authorizedAdmin,
   formidable(),
   updateProductDetails
 );
-router.delete('/:id', verifyToken, authorizedAdmin, removeProduct);
-router.get('/:id', verifyToken, getOneProduct);
+router.delete(
+  '/removeProduct/:id',
+  verifyToken,
+  authorizedAdmin,
+  removeProduct
+);
+router.get('/product/:id', verifyToken, getOneProduct);
 
-router.post('/filtered-products', verifyToken, filteredProducts);
+router.post('/products/filtered-products', verifyToken, filteredProducts);
 
 module.exports = router;

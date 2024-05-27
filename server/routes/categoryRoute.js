@@ -10,10 +10,20 @@ const {
   getOneCategory,
 } = require('../controllers/categoryCtrl.js');
 
-router.post('/', verifyToken, authorizedAdmin, createCategory);
-router.put('/:categoryId', verifyToken, authorizedAdmin, updateCategory);
-router.delete('/:categoryId', verifyToken, authorizedAdmin, deleteCategory);
+router.post('/createCategory', verifyToken, authorizedAdmin, createCategory);
+router.put(
+  '/updateCategory/:categoryId',
+  verifyToken,
+  authorizedAdmin,
+  updateCategory
+);
+router.delete(
+  'deleteCategory/:categoryId',
+  verifyToken,
+  authorizedAdmin,
+  deleteCategory
+);
 router.get('/categories', listAllCategories);
-router.get('/:id', getOneCategory);
+router.get('category/:id', getOneCategory);
 
 module.exports = router;
