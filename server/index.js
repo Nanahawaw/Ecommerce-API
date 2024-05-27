@@ -9,8 +9,6 @@ const categoryRouter = require('./routes/categoryRoute');
 const productRouter = require('./routes/productRoute');
 const uploadRouter = require('./routes/uploadRoute');
 const orderRouter = require('./routes/orderRoute');
-const { fileURLToPath } = require('url');
-const { dirname, join } = require('path');
 const fs = require('fs');
 const swaggerUi = require('swagger-ui-express');
 
